@@ -1,6 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
+
 class Currency < ActiveRecord::Base
   serialize :options, JSON
 
@@ -20,7 +21,8 @@ class Currency < ActiveRecord::Base
   validates :options, length: { maximum: 1000 }
   validates :base_factor, numericality: { greater_than_or_equal_to: 1, only_integer: true }
 
-  validates :quick_withdraw_limit,
+  validates :withdraw_limit_24h,
+            :withdraw_limit_72h,
             :min_deposit_amount,
             :min_collection_amount,
             :withdraw_fee,
@@ -146,4 +148,3 @@ class Currency < ActiveRecord::Base
                 :type,
                 :erc20_contract_address
 end
-
