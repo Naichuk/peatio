@@ -67,17 +67,14 @@ describe Peatio::Ranger do
         ws_server do |socket|
           connection = Peatio::Ranger::Connection.new(auth, socket, logger)
           socket.onopen do |handshake|
+            handshake.headers
             connection.handshake(handshake)
-          end
-          socket.onmessage do |msg|
-            connection.handle(msg)
           end
         end
 
         EM.add_timer(0.1) do
-          ws_client.callback { ws_client.send_msg JSON.dump({event:"auth", jwt: "garbage"}) }
-          ws_client.disconnect { done }
           ws_client.stream { |msg|
+            binding.pry
             expect(msg.data).to eq msg_auth_failed
             done
           }
@@ -98,22 +95,33 @@ describe Peatio::Ranger do
         ws_server do |socket|
           connection = Peatio::Ranger::Connection.new(auth, socket, logger)
           socket.onopen do |handshake|
+            binding.pry
             connection.handshake(handshake)
           end
           socket.onmessage do |msg|
+            binding.pry
             connection.handle(msg)
           end
         end
 
         EM.add_timer(0.1) do
           token = auth.encode("").to_json
-          wsc = ws_connect("", { "Authorization" => "Bearer #{token}" })
-
-          wsc.callback { binding.pry }
+          wsc = ws_connect("", { "authorization" => "Bearer #{token}" })
+          binding.pry
+          wsc.stream { |msg|
+            binding.pry
+            expect(msg.data).to eq msg_auth_failed
+            done
+          }
+          wsc.callback do
+             msg = { event: 'subscribe', streams: ['usdtc.order'] } 
+             wsc.send_msg msg.to_json
+          end
 
           wsc.disconnect { done }
 
           wsc.stream { |msg|
+            binding.pry
             expect(msg.data).to eq msg_auth_failed
             done
           }
@@ -135,6 +143,7 @@ describe Peatio::Ranger do
           connection = Peatio::Ranger::Connection.new(auth, socket, logger)
 
           socket.onopen do |handshake|
+            binding.pry
             connection.handshake(handshake)
           end
 
@@ -144,16 +153,18 @@ describe Peatio::Ranger do
         end
 
         EM.add_timer(0.1) do
-          ws_client do |socket|
-            socket
-          end
-
-          ws_client.callback {
-            auth_msg = {jwt: "Bearer #{valid_token}"}
-            ws_client.send_msg auth_msg.to_json
+          wsc = ws_connect("", { "authorization" => "Bearer #{valid_token}" })
+          binding.pry
+          pp 'before callback'
+          wsc.callback {
+            pp 'callback with message'
+            msg = { event: 'subscribe', streams: ['usdtc.order'] }
+            wsc.send_msg msg.to_json
           }
-          ws_client.disconnect { done }
-          ws_client.stream { |msg|
+          pp 'after callback'
+          wsc.disconnect { done }
+          wsc.stream { |msg|
+            binding.pry
             expect(msg.data).to eq msg_auth_success
             done
           }

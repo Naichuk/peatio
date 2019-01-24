@@ -68,10 +68,8 @@ module Peatio::Ranger
       query = URI::decode_www_form(hs.query_string)
       subscribe(query.map {|item| item.last if item.first == "stream"})
       @logger.info "ranger: WebSocket connection openned"
-
-      if hs.headers.key?("Authorization")
-        authorized, payload = authenticate(hs.headers["Authorization"])
-
+      if hs.headers.key?("authorization")
+        authorized, payload = authenticate(hs.headers["authorization"])
         if !authorized
           send :error, message: "Authentication failed."
         else

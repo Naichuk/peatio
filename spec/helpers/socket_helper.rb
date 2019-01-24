@@ -22,7 +22,7 @@ class EM::WebSocketClient
       c.url = uri
       c.protocol_version = opts[:version]
       c.origin = opts[:origin]
-      c.headers = @headers
+      c.headers = headers
     end
   end
 
