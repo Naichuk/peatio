@@ -1,6 +1,6 @@
 require "em-spec/rspec"
 require "bunny-mock"
-require "pry-byebug"
+require "pry"
 
 describe Peatio::Ranger do
   let(:logger) { Peatio::Logger }

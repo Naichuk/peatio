@@ -62,13 +62,8 @@ module Peatio::Ranger
       end
     end
 
-    end
-
     def handshake(hs)
       @client = Peatio::MQ::Events::Client.new(@socket)
-
-      # pp hs.headers
-      pp hs
 
       query = URI::decode_www_form(hs.query_string)
       subscribe(query.map {|item| item.last if item.first == "stream"})
