@@ -29,6 +29,7 @@ class Market < ActiveRecord::Base
   scope :with_base_unit, -> (base_unit){ where(ask_unit: base_unit) }
 
   validate { errors.add(:ask_unit, :invalid) if ask_unit == bid_unit }
+  validate { errors.add(:id, :taken) if mirror_market? }
   validates :id, uniqueness: { case_sensitive: false }, presence: true
   validates :ask_unit, :bid_unit, presence: true
   validates :ask_fee, :bid_fee, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 0.5 }
@@ -67,6 +68,10 @@ class Market < ActiveRecord::Base
   # @deprecated
   def ask
     { fee: ask_fee, currency: ask_unit, fixed: ask_precision }
+  end
+
+  def mirror_market?
+    Market.where(ask_unit: self.bid_unit, bid_unit: self.ask_unit).present?
   end
 
   def name
