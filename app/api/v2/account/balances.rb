@@ -25,6 +25,7 @@ module API
         params do
           use :currency
         end
+
         get '/balances/:currency' do
           present current_user.accounts.enabled.find_by!(currency_id: params[:currency]),
                   with: API::V2::Entities::Account

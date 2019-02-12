@@ -36,6 +36,7 @@ module BlockchainService
       end
     rescue => e
       report_exception(e)
+      binding.pry
       Rails.logger.info { "Exception was raised during block processing." }
     end
 
