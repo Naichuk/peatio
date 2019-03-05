@@ -5,7 +5,7 @@ require_relative 'injectors'
 module Bench
   class Matching
     # TODO: Custom config file support.
-    def initialize(config_file_path = 'config/bench/matching.yml')
+    def initialize(config_file_path)
       @config = YAML.load_file(Rails.root.join(config_file_path)).deep_symbolize_keys
       @rmq_http_client ||= ::URI::HTTP.build(
         scheme:   :http,
