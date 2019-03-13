@@ -3,6 +3,8 @@
 module BlockchainService
   class Ripple < Base
     def process_blockchain(blocks_limit: 300, force: false)
+      super
+      return
       if blockchain.height > 0
         current_ledger   = blockchain.height
         latest_ledger    = [client.latest_block_number, current_ledger + blocks_limit].min

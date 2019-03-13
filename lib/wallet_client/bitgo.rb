@@ -51,7 +51,69 @@ module WalletClient
       convert_from_base_unit(wallet_details(true).fetch('balanceString'))
     end
 
-    protected
+    def each_deposit!(options = {})
+      each_batch_of_deposits do |deposits|
+        deposits.each { |deposit| yield deposit }
+      end
+    end
+
+    def each_deposit(options = {})
+      each_batch_of_deposits false do |deposits|
+        deposits.each { |deposit| yield deposit }
+      end
+    end
+
+    def build_deposit(tx)
+      entries = build_deposit_entries(tx)
+      return if entries.blank?
+      binding.pry
+      { txid:          normalize_txid(tx.fetch('txid')),
+        address:       entries.fetch(:address),
+        block_number:  tx.fetch('height').to_i,
+        amount:        entries.fetch(:amount),
+        member:        entries.fetch(:member),
+        currency:      entries.fetch(:currency),
+        received_at:   Time.parse(tx.fetch('date')) }
+    end
+
+    def build_deposit_entries(tx)
+      tx.fetch('entries').each do |entry|
+        payment_addresses_where(address: entry['address']) do |payment_address|
+          binding.pry
+          next unless entry['wallet'] == wallet_id
+          next unless entry['valueString'].to_d > 0
+          next unless tx.fetch('type') != 'recieve'
+          next if entry.key?('outputs') && entry['outputs'] != 1
+          return { amount:  convert_from_base_unit(entry.fetch('valueString')),
+          currency: wallet.currency,
+          member:  payment_address.account.member,
+          address: normalize_address(entry.fetch('address')) }.compact
+        end
+      end
+    end
+
+    def each_batch_of_deposits(raise = true)
+      next_batch_ref = nil
+      collected      = []
+      loop do
+        begin
+          batch_deposits = nil
+          query          = { limit: 100, prevId: next_batch_ref }
+          response       = rest_api(:get, '/wallet/' + urlsafe_wallet_id + '/transfer', query)
+          next_batch_ref = response['nextBatchPrevId']
+          batch_deposits = response.fetch('transfers')
+                                   .map { |tx| build_deposit(tx) }
+                                   .compact
+        rescue => e
+          report_exception(e)
+          raise e if raise
+        end
+        yield batch_deposits if batch_deposits
+        collected += batch_deposits
+        break if next_batch_ref.blank?
+      end
+      collected
+    end
 
     def rest_api(verb, path, data = nil, raise_error = true)
       args = [@endpoint + path]

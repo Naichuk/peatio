@@ -52,5 +52,15 @@ module WalletClient
       end
       x.to_i
     end
+
+    def payment_addresses_where(options = {})
+      options = { currency: wallet.currency }.merge(options)
+      PaymentAddress
+        .includes(:currency)
+        .where(options)
+        .each do |payment_address|
+          yield payment_address if block_given?
+        end
+    end
   end
 end

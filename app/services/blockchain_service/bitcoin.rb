@@ -7,6 +7,8 @@ module BlockchainService
     def process_blockchain(blocks_limit: 6, force: false)
       latest_block = client.latest_block_number
 
+      super
+      return
       # Don't start process if we didn't receive new blocks.
       if blockchain.height + blockchain.min_confirmations >= latest_block && !force
         Rails.logger.info { "Skip synchronization. No new blocks detected height: #{blockchain.height}, latest_block: #{latest_block}" }
