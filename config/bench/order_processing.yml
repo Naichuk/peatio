@@ -1,4 +1,4 @@
-- currencies:   usd,eur         # List of fiat currencies for creating deposits.
+- currencies:   btc,usd         # List of fiat currencies for creating deposits.
   traders:      25              # Number of members who will trade.
   threads:      50              # Number of simultaneous threads which will publish messages to RabbitMQ.
   report_path:  bench/reports   # Path for saving benchmark report.
@@ -7,8 +7,8 @@
     #
     # Generic config.
     injector:   dummy   # Order injector name.
-    number:     1200    # Number of orders to be created and published to RabbitMQ (at least 2000).
-    markets:    usdeur  # Markets for performing trading.
+    number:     10000    # Number of orders to be created and published to RabbitMQ (at least 2000).
+    markets:    btcusd  # Markets for performing trading.
     #
     # Dummy injector specific config.
     min_volume: 0.1     # Order min volume (default 0.1).
@@ -16,7 +16,7 @@
     min_price:  0.5     # Order min price (default 0.5).
     max_price:  2.0     # Order max price (default 2.0).
 
-- currencies:   usd,eur         # List of fiat currencies for creating deposits.
+- currencies:   btc,usd         # List of fiat currencies for creating deposits.
   traders:      25              # Number of members who will trade.
   threads:      50              # Number of simultaneous threads which will publish messages to RabbitMQ.
   report_path:  bench/reports   # Path for saving benchmark report.
@@ -26,7 +26,7 @@
     # Generic config.
     injector:       bitfinex  # Order injector name.
     number:         1200      # Number of orders to be created and published to RabbitMQ (at least 2000).
-    markets:        usdeur    # Markets for performing trading.
+    markets:        btcusd    # Markets for performing trading.
     #
     # Bitfinex injector specific config.
     # Path to bitfinex order history file.

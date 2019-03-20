@@ -53,15 +53,28 @@ module Bench
       DEFAULT_DEPOSIT_AMOUNT = 1_000_000_000
       def initialize(options)
         @options = options
+        @currency = Currency.find(options[:currency_id])
       end
 
       def create
-        ::Deposit.create!(construct_deposit).tap(&:charge!)
+        if @currency.fiat?
+          ::Deposit.create!(construct_fiat_deposit).tap(&:charge!)
+        else
+          ::Deposit.create!(construct_coin_deposit).tap { |d| d.with_lock { d.accept! } }
+        end
       end
 
-      def construct_deposit
+      def construct_fiat_deposit
         { amount: DEFAULT_DEPOSIT_AMOUNT,
-          type: 'Deposits::Fiat' }.merge(@options)
+          type:   'Deposits::Fiat' }.merge(@options)
+      end
+
+      def construct_coin_deposit
+        { amount:  DEFAULT_DEPOSIT_AMOUNT,
+          address: Faker::Bitcoin.address,
+          txid:    Faker::Lorem.characters(64),
+          txout:   0,
+          type:    'Deposits::Coin' }.merge(@options)
       end
     end
   end
