@@ -1,5 +1,3 @@
-require_relative '../injectors'
-
 module Bench
   module Injectors
     class Bitfinex < Base
