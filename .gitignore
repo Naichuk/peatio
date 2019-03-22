@@ -29,6 +29,7 @@ tmp
 /config/plugins.yml
 /config/management_api_v1.yml
 /config/seed/*
+/config/bench/*.yml
 
 # Ignore translations.js
 /public/javascripts/translations.js
