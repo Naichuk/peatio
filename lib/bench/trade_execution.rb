@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bench
   class TradeExecution < Matching
     def run!

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: Add Bench::Error and better errors processing.
 # TODO: Add Bench::Report and extract all metrics to it.
 # TODO: Add missing frozen_string literal to whole module.
