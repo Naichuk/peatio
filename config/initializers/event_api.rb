@@ -10,7 +10,6 @@ require 'active_support/lazy_load_hooks'
 module EventAPI
   class << self
     def notify(event_name, event_payload)
-      return if ENV['EVENT_API_ENABLED'] == 'false'
       arguments = [event_name, event_payload]
       middlewares.each do |middleware|
         returned_value = middleware.call(*arguments)
