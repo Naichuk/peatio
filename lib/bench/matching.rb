@@ -103,9 +103,11 @@ module Bench
     end
 
     def save_report
+      report_path = Rails.root.join(@config[:report_path])
+      FileUtils.mkpath(report_path)
       report_name = "#{self.class.name.humanize.demodulize}-#{@config[:orders][:injector]}-"\
                     "#{@config[:orders][:number]}-#{@publish_started_at.iso8601}.yml"
-      File.open(Rails.root.join(@config[:report_path], report_name), 'w') do |f|
+      File.open(report_path.join(report_name), 'w') do |f|
         f.puts YAML.dump(result.deep_stringify_keys)
       end
     end
@@ -125,7 +127,9 @@ module Bench
     end
 
     def queue_status_file_path(name)
-      Rails.root.join(@config[:log_path], "#{name}-#{@publish_started_at.iso8601}.yml")
+      log_path = Rails.root.join(@config[:log_path])
+      FileUtils.mkpath(log_path)
+      log_path.join("#{name}-#{@publish_started_at.iso8601}.yml")
     end
   end
 end
