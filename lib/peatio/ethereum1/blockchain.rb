@@ -7,6 +7,9 @@ module Ethereum1
       end
     end
 
+    TOKEN_EVENT_IDENTIFIER = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+    SUCCESS = '0x1'
+
     DEFAULT_FEATURES = { case_sensitive: false, supports_cash_addr_format: false }.freeze
 
     def initialize(custom_features = {})
@@ -15,7 +18,16 @@ module Ethereum1
     end
 
     def configure(settings = {})
-      @settings.merge!(settings.slice(*SUPPORTED_SETTINGS))
+      @erc20 = []; @eth = []
+      supported_settings = settings.slice(*SUPPORTED_SETTINGS)
+      supported_settings[:currencies].each do |c|
+        if c.dig(:options, :erc20_contract_address).present?
+          @erc20 << c
+        else
+          @eth << c
+        end
+      end if supported_settings[:currencies]
+      @settings.merge!(supported_settings)
     end
 
     def fetch_block!(block_number)
@@ -26,17 +38,27 @@ module Ethereum1
         return
       end
 
-      block_json.fetch('transactions').each_with_object([]) do |tx, block|
-        binding.pry
+      block_json.fetch('transactions').each_with_object([]) do |tx, block_arr|
+        # binding.pry
         if tx.fetch('input').hex <= 0
-          next if client.invalid_eth_transaction?(tx)
+          txn = tx
+          next if invalid_eth_transaction?(txn)
+          # binding.pry
         else
           # tx = client.get_txn_receipt(tx.fetch('hash'))
-          tx = client.json_rpc(:eth_getTransactionReceipt, [normalize_txid(tx.fetch('hash'))])
-          next if tx.nil? || client.invalid_erc20_transaction?(tx)
+          txn = client.json_rpc(:eth_getTransactionReceipt, [normalize_txid(tx.fetch('hash'))])
+
+          next if txn.nil? || invalid_erc20_transaction?(txn)
         end
-        normalized_tx = build_transaction(tx).megre(block_number: block_number)
-        block << Peatio::Transaction.new(normalized_tx)
+        binding.pry
+        txs = build_transactions(txn).map do |ntx|
+          Peatio::Transaction.new(ntx.merge(block_number: block_number))
+        end
+        # normalized_tx = build_transactions(txn)#.megre(block_number: block_number)
+        # next if normalized_tx.blank?
+        # normalized_tx.megre(block_number: block_number)
+        # block_arr << Peatio::Transaction.new(normalized_tx)
+        block_arr << txs
       end.yield_self { |block_arr| Peatio::Block.new(block_number, block_arr) }
     end
 
@@ -63,12 +85,61 @@ module Ethereum1
       txid.try(:downcase)
     end
 
-    def build_transaction(tx_hash)
+    def normalize_address(address)
+      address.try(:downcase)
+    end
+
+    def build_transactions(tx_hash)
       if tx_hash.has_key?('logs')
-        build_erc20_transaction(txn)
+        build_erc20_transactions(tx_hash)
       else
-        build_eth_transaction(txn)
+        build_eth_transactions(tx_hash)
       end
+    end
+
+    def build_eth_transactions(tx)
+      @eth.each_with_object([]) do |currency, formatted_txs|
+        formatted_txs << { hash:        normalize_txid(tx.fetch('hash')),
+                           amount:      convert_from_base_unit(tx.fetch('value').hex, currency), 
+                           to_address:  normalize_address(tx['to']),
+                           currency_id: currency.fetch(:id) }
+      end
+    end
+
+    def build_erc20_transactions(tx)
+      tx.fetch('logs').each_with_object([]) do |log, formatted_txs|
+
+        next if log.fetch('topics').blank? || log.fetch('topics')[0] != TOKEN_EVENT_IDENTIFIER
+
+        # Skip if ERC20 contract address doesn't match.
+        currencies = @erc20.select { |c| c.dig(:options, :erc20_contract_address) == log.fetch('address') }
+        next unless currencies.present?
+
+        destination_address = normalize_address('0x' + log.fetch('topics').last[-40..-1])
+
+        currencies.each do |currency|
+          formatted_txs << { hash:        normalize_txid(tx.fetch('transactionHash')),
+                             amount:      convert_from_base_unit(log.fetch('data').hex, currency),
+                             to_address:  destination_address,
+                             txout:       log['logIndex'].to_i(16),
+                             currency_id: currency.fetch(:id) }
+        end
+      end
+    end
+
+    def invalid_eth_transaction?(block_txn)
+      block_txn.fetch('to').blank? \
+      || block_txn.fetch('value').hex.to_d <= 0 && block_txn.fetch('input').hex <= 0 \
+    end
+
+    def invalid_erc20_transaction?(txn_receipt)
+      txn_receipt.fetch('status') != SUCCESS \
+      || txn_receipt.fetch('to').blank? \
+      || txn_receipt.fetch('logs').blank?
+    end
+
+    def convert_from_base_unit(value, currency)
+      value.to_d / currency.fetch(:base_factor).to_d
     end
   end
 end

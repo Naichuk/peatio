@@ -33,7 +33,7 @@ module Ethereum1
     private
 
     def rpc_call_id
-      @json_rpc_call_id += 1
+      @json_rpc_call_id
     end
 
     def connection
