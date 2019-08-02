@@ -30,6 +30,10 @@ class Trade < ApplicationRecord
     end
   end
 
+  def taker
+    ask_id > bid_id ? ask : bid
+  end
+
   def side(member)
     return unless member
 
@@ -96,8 +100,14 @@ class Trade < ApplicationRecord
   def record_liability_credit!
     # We multiply ask outcome by bid fee.
     # Fees are related to side bid or ask (not currency).
-    ask_currency_income = volume - volume * bid.fee
-    bid_currency_income = funds - funds * ask.fee
+    if bid == taker
+      ask_currency_income = volume - volume * bid.taker_fee
+      bid_currency_income = funds - funds * ask.maker_fee
+    else
+      ask_currency_income = volume - volume * bid.maker_fee
+      bid_currency_income = funds - funds * ask.taker_fee
+    end
+
 
     # Credit main fiat/crypto Liability account for member who created ask.
     Operations::Liability.credit!(
@@ -135,8 +145,13 @@ class Trade < ApplicationRecord
   end
 
   def record_revenues!
-    ask_currency_fee = volume * bid.fee
-    bid_currency_fee = funds * ask.fee
+    if bid == taker
+      ask_currency_fee = volume * bid.taker_fee
+      bid_currency_fee = funds * ask.maker_fee
+    else
+      ask_currency_fee = volume * bid.maker_fee
+      bid_currency_fee = funds * ask.taker_fee
+    end
 
     # Credit main fiat/crypto Revenue account.
     Operations::Revenue.credit!(

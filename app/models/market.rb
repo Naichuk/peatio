@@ -46,7 +46,7 @@ class Market < ApplicationRecord
   validate { errors.add(:id, :taken) if Market.where(base_unit: quote_unit, quote_unit: base_unit).present? }
   validates :id, uniqueness: { case_sensitive: false }, presence: true
   validates :base_unit, :quote_unit, presence: true
-  validates :ask_fee, :bid_fee, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 0.5 }
+  validates :maker_fee, :taker_fee, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 0.5 }
   validate  :validate_attr_precisions
 
   validates :amount_precision, :price_precision, :position, numericality: { greater_than_or_equal_to: 0, only_integer: true }
@@ -132,7 +132,7 @@ class Market < ApplicationRecord
 private
 
   def validate_attr_precisions
-    { bid_fee: FEE_PRECISION, ask_fee: FEE_PRECISION,
+    { maker_fee: FEE_PRECISION, taker_fee: FEE_PRECISION,
       min_price: price_precision, max_price: price_precision,
       min_amount: amount_precision }.each do |field, precision|
       attr_value = public_send(field)
@@ -158,7 +158,7 @@ private
 end
 
 # == Schema Information
-# Schema version: 20190624102330
+# Schema version: 20190730140609
 #
 # Table name: markets
 #
@@ -167,8 +167,8 @@ end
 #  quote_unit       :string(10)       not null
 #  amount_precision :integer          default(4), not null
 #  price_precision  :integer          default(4), not null
-#  ask_fee          :decimal(17, 16)  default(0.0), not null
-#  bid_fee          :decimal(17, 16)  default(0.0), not null
+#  maker_fee        :decimal(17, 16)  default(0.0), not null
+#  taker_fee        :decimal(17, 16)  default(0.0), not null
 #  min_price        :decimal(32, 16)  default(0.0), not null
 #  max_price        :decimal(32, 16)  default(0.0), not null
 #  min_amount       :decimal(32, 16)  default(0.0), not null

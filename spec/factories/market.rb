@@ -7,8 +7,8 @@ FactoryBot.define do
       id                { 'btcusd' }
       base_unit         { 'btc' }
       quote_unit        { 'usd' }
-      ask_fee           { 0.0015 }
-      bid_fee           { 0.0015 }
+      maker_fee           { 0.0015 }
+      taker_fee           { 0.0015 }
       amount_precision  { 8 }
       price_precision   { 2 }
       min_price         { 0.01 }
@@ -21,8 +21,8 @@ FactoryBot.define do
       id                { 'btceth' }
       base_unit         { 'btc' }
       quote_unit        { 'eth' }
-      ask_fee           { 0.0015 }
-      bid_fee           { 0.0015 }
+      maker_fee           { 0.0015 }
+      taker_fee           { 0.0015 }
       amount_precision  { 4 }
       price_precision   { 6 }
       min_price         { 0.000001 }

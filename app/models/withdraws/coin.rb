@@ -50,7 +50,7 @@ module Withdraws
 end
 
 # == Schema Information
-# Schema version: 20190725131843
+# Schema version: 20190730140453
 #
 # Table name: withdraws
 #

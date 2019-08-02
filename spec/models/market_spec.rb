@@ -57,10 +57,10 @@ describe Market do
 
   context 'validations' do
     let(:valid_attributes) do
-      { base_unit:         :btc,
-        quote_unit:         :trst,
-        bid_fee:          0.1,
-        ask_fee:          0.2,
+      { base_unit:        :btc,
+        quote_unit:       :trst,
+        taker_fee:        0.1,
+        maker_fee:        0.2,
         min_amount:       0.0001,
         min_price:        0.0001,
         amount_precision: 4,
@@ -69,10 +69,10 @@ describe Market do
     end
 
     let(:mirror_attributes) do
-      { base_unit:         :usd,
-        quote_unit:         :btc,
-        bid_fee:          0.1,
-        ask_fee:          0.2,
+      { base_unit:        :usd,
+        quote_unit:       :btc,
+        maker_fee:        0.1,
+        taker_fee:        0.2,
         min_amount:       0.0001,
         min_price:        0.0001,
         amount_precision: 4,
@@ -116,6 +116,7 @@ describe Market do
 
     it 'validates fields to be greater than or equal to 0' do
       %i[bid_fee ask_fee price_precision amount_precision position].each do |field|
+        binding.pry
         record = Market.new(valid_attributes.merge(field => -1))
         record.save
         expect(record.errors.full_messages).to include(/#{to_readable(field)} must be greater than or equal to 0/i)

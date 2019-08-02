@@ -46,9 +46,9 @@ module Admin
     def permitted_market_attributes
       attributes = [
         :quote_unit,
-        :bid_fee,
         :base_unit,
-        :ask_fee,
+        :maker_fee,
+        :taker_fee,
         :state,
         :min_price,
         :max_price,
