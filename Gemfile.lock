@@ -6,6 +6,16 @@ GIT
       rails (>= 4.1)
       vault (~> 0.5)
 
+PATH
+  remote: ../../openware/peatio-plugins/peatio-ark
+  specs:
+    peatio-ark (0.1.0)
+      activesupport (~> 5.2.3)
+      better-faraday (~> 1.0.5)
+      faraday (~> 0.15.4)
+      memoist (~> 0.16.0)
+      peatio (>= 0.6.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -487,6 +497,7 @@ DEPENDENCIES
   mysql2 (~> 0.5.2)
   net-http-persistent (~> 3.0.1)
   peatio (= 2.4.0.pre.alpha)
+  peatio-ark!
   peatio-bitcoincash (~> 2.4.0)
   peatio-dash (~> 2.4.0)
   peatio-litecoin (~> 2.4.0)

@@ -7,3 +7,5 @@ gem 'peatio-dash', '~> 2.4.0'
 gem 'peatio-litecoin', '~> 2.4.0'
 gem 'peatio-bitcoincash', '~> 2.4.0'
 gem 'peatio-ripple', '~> 2.4.0'
+
+gem 'peatio-ark', path: '../../openware/peatio-plugins/peatio-ark'
