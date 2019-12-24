@@ -145,7 +145,7 @@ class Deposit < ApplicationRecord
 end
 
 # == Schema Information
-# Schema version: 20190426145506
+# Schema version: 20191223140023
 #
 # Table name: deposits
 #
@@ -154,7 +154,7 @@ end
 #  currency_id  :string(10)       not null
 #  amount       :decimal(32, 16)  not null
 #  fee          :decimal(32, 16)  not null
-#  address      :string(95)
+#  address      :string(106)
 #  txid         :string(128)
 #  txout        :integer
 #  aasm_state   :string(30)       not null

@@ -1,0 +1,10 @@
+- key:               xmr-testnet
+  name:              Monero Testnet
+  client:            monero                                 # API client name.
+  server:            http://testnet.node.xmrlab.com:38081   # Public Monero node endpoint. IMPORTANT: full syncmode.
+  height:            10000                                  # Initial block number from which sync will be started.
+  min_confirmations: 11                                     # Minimal confirmations needed for withdraw and deposit confirmation.
+  explorer:
+    address:         https://xmrchain.net/tx/#{address}     # Monero does not show address information.
+    transaction:     https://xmrchain.net/tx/#{txid}
+  status:            active

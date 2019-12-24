@@ -46,14 +46,14 @@ class PaymentAddress < ApplicationRecord
 end
 
 # == Schema Information
-# Schema version: 20190807092706
+# Schema version: 20191223111550
 #
 # Table name: payment_addresses
 #
 #  id                :integer          not null, primary key
 #  currency_id       :string(10)       not null
 #  account_id        :integer          not null
-#  address           :string(95)
+#  address           :string(106)
 #  secret_encrypted  :string(255)
 #  details_encrypted :string(1024)
 #  created_at        :datetime         not null

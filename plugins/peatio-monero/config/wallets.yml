@@ -1,0 +1,47 @@
+- name:             Monero Deposit Wallet
+  blockchain_key:   xmr-testnet
+  currency_id:      xmr
+  # Address where deposits will be collected to.
+  address:          '579UXL2TWe9JuFUckNKzQFhE3kRNH3vpp1M6EKVsxYS7ga2qAemr1mDdV37V54DH9v43AHtkBf9ZGNQBbZ8RyGY83Hnf8c6'   # IMPORTANT: Always wrap this value in quotes!
+  kind:             deposit  # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1        # Number of signatures required for performing withdraw.
+  max_balance:      0.0
+  status:           active
+  gateway:          monerod  # Gateway client name.
+  settings:
+    #
+    # Monero gateway client settings.
+    uri:          http://127.0.0.1:38083
+    secret:       'changeme' # Wallet's Private View Key
+
+- name:             Monero Hot Wallet
+  blockchain_key:   xmr-testnet
+  currency_id:      xmr
+  # Address where deposits will be collected to.
+  address:          '579UXL2TWe9JuFUckNKzQFhE3kRNH3vpp1M6EKVsxYS7ga2qAemr1mDdV37V54DH9v43AHtkBf9ZGNQBbZ8RyGY83Hnf8c6'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             hot     # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      100.0
+  status:           active
+  gateway:          monerod  # Gateway client name.
+  settings:
+    #
+    # Monero gateway client settings.
+    uri:          http://127.0.0.1:38084
+    secret:       'changeme' # Wallet's Private View Key
+
+- name:             Monero Warm Wallet
+  blockchain_key:   xmr-testnet
+  currency_id:      xmr
+  # Address where deposits will be collected to.
+  address:          '579UXL2TWe9JuFUckNKzQFhE3kRNH3vpp1M6EKVsxYS7ga2qAemr1mDdV37V54DH9v43AHtkBf9ZGNQBbZ8RyGY83Hnf8c6'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             warm    # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      1000.0
+  status:           active
+  gateway:          monerod  # Gateway client name.
+  settings:
+    #
+    # Monero gateway client settings.
+    uri:          http://127.0.0.1:38085
+    secret:       'changeme' # Wallet's Private View Key

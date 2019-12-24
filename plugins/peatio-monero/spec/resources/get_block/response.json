@@ -1,0 +1,31 @@
+{
+  "id": "0",
+  "jsonrpc": "2.0",
+  "result": {
+    "blob": "0b0bc3ab95ea056aeda9c4ac0d593102961e0334883ae036ed6b006b84de49979768d9f27d83fdbd00812d02af9b1701fff39a1701dbf4f7afcbff03024ed20260472c2fbf8db5d7fde99cbd425d6346ef171bc35c7e71cb566219953f21015fd95c1c749b71c1569de1f20f727da6c813bb82d4bb24ca2db38b66926e0a6a0001f234dfafd8aa759f8b5c8ee8c5bfd6690b3a74cfcc8a9cda267db6a466066ee3",
+    "block_header": {
+      "block_size": 1887,
+      "block_weight": 1887,
+      "cumulative_difficulty": 11560337715,
+      "depth": 2221,
+      "difficulty": 6900,
+      "hash": "d7a8c7741396f9264d008844e111921da80c138eccee712215f27c9712c83f25",
+      "height": 380275,
+      "long_term_weight": 1887,
+      "major_version": 11,
+      "minor_version": 11,
+      "nonce": 763429053,
+      "num_txes": 1,
+      "orphan_status": false,
+      "pow_hash": "",
+      "prev_hash": "6aeda9c4ac0d593102961e0334883ae036ed6b006b84de49979768d9f27d83fd",
+      "reward": 17578059496027,
+      "timestamp": 1564825027
+    },
+    "json": "{\n  \"major_version\": 11, \n  \"minor_version\": 11, \n  \"timestamp\": 1564825027, \n  \"prev_id\": \"6aeda9c4ac0d593102961e0334883ae036ed6b006b84de49979768d9f27d83fd\", \n  \"nonce\": 763429053, \n  \"miner_tx\": {\n    \"version\": 2, \n    \"unlock_time\": 380335, \n    \"vin\": [ {\n        \"gen\": {\n          \"height\": 380275\n        }\n      }\n    ], \n    \"vout\": [ {\n        \"amount\": 17578059496027, \n        \"target\": {\n          \"key\": \"4ed20260472c2fbf8db5d7fde99cbd425d6346ef171bc35c7e71cb566219953f\"\n        }\n      }\n    ], \n    \"extra\": [ 1, 95, 217, 92, 28, 116, 155, 113, 193, 86, 157, 225, 242, 15, 114, 125, 166, 200, 19, 187, 130, 212, 187, 36, 202, 45, 179, 139, 102, 146, 110, 10, 106\n    ], \n    \"rct_signatures\": {\n      \"type\": 0\n    }\n  }, \n  \"tx_hashes\": [ \"f234dfafd8aa759f8b5c8ee8c5bfd6690b3a74cfcc8a9cda267db6a466066ee3\"\n  ]\n}",
+    "miner_tx_hash": "6e5ed1fce2be4b7b25dd860999075c6da4d26de9ebba2a965bee3356fbd86c11",
+    "status": "OK",
+    "tx_hashes": ["f234dfafd8aa759f8b5c8ee8c5bfd6690b3a74cfcc8a9cda267db6a466066ee3"],
+    "untrusted": false
+  }
+}

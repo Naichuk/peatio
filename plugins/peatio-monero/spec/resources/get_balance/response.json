@@ -1,0 +1,20 @@
+{
+  "id": "0",
+  "jsonrpc": "2.0",
+  "result": {
+    "balance": 7999283910000,
+    "blocks_to_unlock": 0,
+    "multisig_import_needed": false,
+    "per_subaddress": [{
+      "account_index": 0,
+      "address": "56QBugWRa4xMXsWq8NtFQ7DtAQuCvseGHKKuZ4hiHHMCLSK5fkF3ezSVgPjcxyXthDcUmQf7LwhqAGtDcUMhyXxPAurDrjX",
+      "address_index": 0,
+      "balance": 7999283910000,
+      "blocks_to_unlock": 0,
+      "label": "Primary account",
+      "num_unspent_outputs": 1,
+      "unlocked_balance": 7999283910000
+    }],
+    "unlocked_balance": 7999283910000
+  }
+}
